@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-homepage: "https://www.comprend.com"
+homepage: "https://www.comprend.com?utm_source=gtm-community-template-gallery&utm_medium=openai-ads"
 documentation: "https://github.com/comprend-gtm-templates/openai-ads/blob/main/README.md"
 versions:
   - sha: f270d1be8c9e6703e0ba89a080189b2aac057b6a
