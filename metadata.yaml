@@ -13,7 +13,7 @@
 # limitations under the License.
 
 homepage: "https://www.comprend.com"
-documentation: "https://github.com/comprend-gtm-templates/<REPLACE WITH REPOSITORY NAME>"
+# documentation: "https://github.com/comprend-gtm-templates/openai-ads"
 versions:
   - sha: <REPLACE WITH COMMIT SHA>
     changeNotes: |-
