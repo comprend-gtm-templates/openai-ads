@@ -13,8 +13,8 @@
 # limitations under the License.
 
 homepage: "https://www.comprend.com"
-# documentation: "https://github.com/comprend-gtm-templates/openai-ads"
+documentation: "https://github.com/comprend-gtm-templates/openai-ads/blob/main/README.md"
 versions:
-  - sha: <REPLACE WITH COMMIT SHA>
+  - sha: f270d1be8c9e6703e0ba89a080189b2aac057b6a
     changeNotes: |-
       Initial release
