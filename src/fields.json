@@ -1,0 +1,411 @@
+[
+  {
+    "type": "TEXT",
+    "name": "pixelIds",
+    "displayName": "Pixel ID(s)",
+    "simpleValueType": true,
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "help": "Pixel ID from OpenAI Ads. Supports multiple Pixel ID's provided as comma-delimited list.",
+    "alwaysInSummary": true,
+    "valueHint": "pixel_id_1,pixel_id_2,pixel_id_3"
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "loadScript",
+    "checkboxText": "Load SDK",
+    "simpleValueType": true,
+    "defaultValue": true,
+    "help": "Loads the ChatGPT Ads Measurement Pixel script (if not already loaded.)"
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "initPixels",
+    "checkboxText": "Initialize Pixels",
+    "simpleValueType": true,
+    "defaultValue": true,
+    "help": "Initializes the Pixel ID's after script load."
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "sendEvent",
+    "checkboxText": "Send Event",
+    "simpleValueType": true,
+    "defaultValue": true,
+    "help": "Sends the configured event to every Pixel ID listed above. Clear this for a base tag that only loads the SDK and initializes the pixels."
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "enableDebug",
+    "checkboxText": "Log Diagnostics",
+    "simpleValueType": true,
+    "defaultValue": false,
+    "help": "Enable diagnostics logging. Enabled automatically in GTM Preview/Debug mode."
+  },
+  {
+    "type": "GROUP",
+    "name": "eventSettings",
+    "displayName": "Event Configuration",
+    "groupStyle": "ZIPPY_OPEN",
+    "enablingConditions": [
+      {
+        "paramName": "sendEvent",
+        "paramValue": true,
+        "type": "EQUALS"
+      }
+    ],
+    "subParams": [
+      {
+        "type": "CHECKBOX",
+        "name": "ecomIntegration",
+        "checkboxText": "Data Layer Integration",
+        "simpleValueType": true,
+        "help": "Builds the event automatically by reading the dataLayer and converting standard GA4 ecommerce events to OpenAI standard events. Any manually mapped fields will take precedence if their values are defined."
+      },
+      {
+        "type": "SELECT",
+        "name": "event",
+        "displayName": "Event Name",
+        "simpleValueType": true,
+        "defaultValue": "page_viewed",
+        "alwaysInSummary": true,
+        "selectItems": [
+          {
+            "value": "page_viewed",
+            "displayValue": "page_viewed"
+          },
+          {
+            "value": "contents_viewed",
+            "displayValue": "contents_viewed"
+          },
+          {
+            "value": "items_added",
+            "displayValue": "items_added"
+          },
+          {
+            "value": "checkout_started",
+            "displayValue": "checkout_started"
+          },
+          {
+            "value": "order_created",
+            "displayValue": "order_created"
+          },
+          {
+            "value": "lead_created",
+            "displayValue": "lead_created"
+          },
+          {
+            "value": "registration_completed",
+            "displayValue": "registration_completed"
+          },
+          {
+            "value": "appointment_scheduled",
+            "displayValue": "appointment_scheduled"
+          },
+          {
+            "value": "trial_started",
+            "displayValue": "trial_started"
+          },
+          {
+            "value": "subscription_created",
+            "displayValue": "subscription_created"
+          },
+          {
+            "value": "custom",
+            "displayValue": "custom"
+          }
+        ],
+        "help": "Choose the business event that matches the page or conversion action.\n<br><br>\n<a href=\"https://developers.openai.com/ads/supported-events\">🌍 developers.openai.com/ads/supported-events</a>",
+        "enablingConditions": [
+          {
+            "paramName": "ecomIntegration",
+            "paramValue": false,
+            "type": "EQUALS"
+          }
+        ],
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "custom_event_name",
+            "displayName": "Custom Event Name",
+            "simpleValueType": true,
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
+            "enablingConditions": [
+              {
+                "paramName": "event",
+                "paramValue": "custom",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "If the event name matches a standard OpenAI Ads event, it will be sent as a standard event. If the event name matches a standard GA4 Ecommerce event, it will be converted to a standard OpenAI Ads event."
+          }
+        ]
+      },
+      {
+        "type": "TEXT",
+        "name": "currency",
+        "displayName": "Currency (currency)",
+        "simpleValueType": true,
+        "help": "Optional 3-letter ISO 4217 currency code such as USD. Required when amount is set."
+      },
+      {
+        "type": "TEXT",
+        "name": "amount",
+        "displayName": "Amount (amount)",
+        "simpleValueType": true,
+        "help": "Send monetary values as integers in the standard ISO 4217 minor unit for the currency code you provide, for example 12999 for $129.99 with currency: \"USD\". If you include an amount, also include a currency."
+      },
+      {
+        "type": "TEXT",
+        "name": "plan_id",
+        "displayName": "Plan ID (plan_id)",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "event",
+            "paramValue": "custom",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "subscription_created",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "trial_started",
+            "type": "EQUALS"
+          }
+        ],
+        "help": "Optional plan or subscription identifier. Used for trial and subscription events."
+      },
+      {
+        "type": "RADIO",
+        "name": "contentsMappingType",
+        "displayName": "Contents Mapping Type",
+        "radioItems": [
+          {
+            "value": "manual",
+            "displayValue": "Manual",
+            "subParams": []
+          },
+          {
+            "value": "variable",
+            "displayValue": "GTM Variable"
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "event",
+            "paramValue": "checkout_started",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "contents_viewed",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "items_added",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "order_created",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "page_viewed",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "subscription_created",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "trial_started",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "event",
+            "paramValue": "custom",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "SIMPLE_TABLE",
+        "name": "contentsTable",
+        "displayName": "Contents (contents)",
+        "enablingConditions": [
+          {
+            "paramName": "contentsMappingType",
+            "paramValue": "manual",
+            "type": "EQUALS"
+          }
+        ],
+        "simpleTableColumns": [
+          {
+            "defaultValue": "",
+            "displayName": "content_type",
+            "name": "content_type",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "id",
+            "name": "id",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "name",
+            "name": "name",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "quantity",
+            "name": "quantity",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "amount",
+            "name": "amount",
+            "type": "TEXT"
+          }
+        ],
+        "newRowButtonText": "Add Content",
+        "help": "Optional. Add content items associated with the event. Content type is optional; examples include product, plan, page, and subscription.\n<br><br>\n<a href=\"https://developers.openai.com/ads/supported-events#content\">🌍 developers.openai.com/ads/supported-events#content</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "contentsVariable",
+        "displayName": "Contents (contents)",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "contentsMappingType",
+            "paramValue": "variable",
+            "type": "EQUALS"
+          }
+        ],
+        "help": "<a href=\"https://developers.openai.com/ads/supported-events#content\">🌍 developers.openai.com/ads/supported-events#content</a>"
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "additionalEventSettings",
+    "displayName": "Additional Event Settings",
+    "groupStyle": "ZIPPY_OPEN",
+    "enablingConditions": [
+      {
+        "paramName": "sendEvent",
+        "paramValue": true,
+        "type": "EQUALS"
+      }
+    ],
+    "subParams": [
+      {
+        "type": "TEXT",
+        "name": "event_id",
+        "displayName": "Event ID (event_id)",
+        "simpleValueType": true,
+        "help": "Set a unique ID to identify the same event sent from the browser and server."
+      },
+      {
+        "type": "TEXT",
+        "name": "opt_out",
+        "displayName": "Opt Out of User-level Personalization (opt_out)",
+        "simpleValueType": true,
+        "valueHint": "true / false",
+        "help": "Set to true to opt out the event from future user-level personalization. Defaults to false."
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "userSettings",
+    "displayName": "User Data",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "TEXT",
+        "name": "email_sha256",
+        "displayName": "Email (SHA-256)",
+        "simpleValueType": true,
+        "help": "SHA-256 hash of the email address after trimming whitespace and converting it to lowercase.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "phone_number_sha256",
+        "displayName": "Phone Number (SHA-256)",
+        "simpleValueType": true,
+        "help": "SHA-256 hash of 8–15 digits after removing a leading +, leading zeroes, whitespace, parentheses, periods, and hyphens.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "external_id_sha256",
+        "displayName": "External ID (SHA-256)",
+        "simpleValueType": true,
+        "help": "SHA-256 hash of a stable, pseudonymous customer identifier from your system.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "first_name_sha256",
+        "displayName": "First Name (SHA-256)",
+        "simpleValueType": true,
+        "help": "SHA-256 hash of the lowercase first name after removing whitespace and ASCII punctuation; non-ASCII characters are preserved.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "last_name_sha256",
+        "displayName": "Last Name (SHA-256)",
+        "simpleValueType": true,
+        "help": "SHA-256 hash of the lowercase last name after removing whitespace and ASCII punctuation; non-ASCII characters are preserved.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "country",
+        "displayName": "Country",
+        "simpleValueType": true,
+        "help": "Two-letter ISO 3166-1 country code, such as US. <br> <br> <a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "city",
+        "displayName": "City",
+        "simpleValueType": true,
+        "help": "City name, with a maximum of 128 characters. OpenAI trims whitespace and converts it to lowercase.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "region",
+        "displayName": "Region",
+        "simpleValueType": true,
+        "help": "State, province, or region, with a maximum of 128 characters.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      },
+      {
+        "type": "TEXT",
+        "name": "postal_code",
+        "displayName": "Postal Code",
+        "simpleValueType": true,
+        "help": "Postal or ZIP code. Use letters, numbers, spaces, or hyphens, with a maximum of 32 characters.\n<br>\n<br>\n<a href=\"https://developers.openai.com/ads/measurement-pixel#send-user-data\">🌍 https://developers.openai.com/ads/measurement-pixel#send-user-data</a>"
+      }
+    ]
+  }
+]
